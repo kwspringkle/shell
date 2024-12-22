@@ -29,14 +29,14 @@ void executeBatchFile(const char* filename, ProcessList* processList) {
         line[strcspn(line, "\n")] = 0;
         if (strlen(line) > 0 && line[0] != '@' && line[0] != ':') {
             printf("Executing: %s\n", line);
-            executeCommand(line, processList);
+            executeCreateCommand(line, processList);
         }
     }
 
     fclose(file);
 }
 
-void executeCommand(const char* command, ProcessList* processList) {
+void executeCreateCommand(const char* command, ProcessList* processList) {
     // Kiểm tra file .bat
     if (strstr(command, ".bat") != NULL) {
         executeBatchFile(command, processList);
@@ -65,11 +65,12 @@ void executeCommand(const char* command, ProcessList* processList) {
         
         if (!isBackground) {
             WaitForSingleObject(pi.hProcess, INFINITE);
-            removeProcess(processList, pi.dwProcessId, pi.hProcess, cmd, isBackground);
+            removeProcess(processList, pi.dwProcessId);
             CloseHandle(pi.hProcess);
         }
+
         CloseHandle(pi.hThread);
     } else {
-        printf("Error creating process\n");
+        printf("Error creating process: %lu\n", GetLastError());
     }
 }

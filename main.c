@@ -32,6 +32,10 @@ int main() {
             printf("Exiting shell...\n");
             break;
         }
+        //Lệnh tạo tiến trình
+        if(strcmp(command, "create process")==0){
+            
+        }
 
         // Kiểm tra lệnh "list"
         if (strcmp(command, "list") == 0) {
@@ -39,8 +43,13 @@ int main() {
             continue;
         }
 
-        // Thực thi lệnh
-        executeCommand(command, &processList);
+        // Kiểm tra lệnh "create <process_name>"
+        if (strncmp(command, "create ", 7) == 0) {
+            executeCreateCommand(command + 7, &processList);  // Tạo tiến trình từ tên lệnh
+            continue;
+        }
+
+        printf("Unknown command: %s\n", command);  // Lệnh không hợp lệ
     }
 
     // Giải phóng bộ nhớ

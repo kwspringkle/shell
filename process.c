@@ -21,11 +21,15 @@ void addProcess(ProcessList * list, DWORD processID, HANDLE hProcess, const char
     process->hProcess = hProcess;
     strncpy(process->cmdName, cmdName, 255);
     process->cmdName[255] = '\0';
+    //strncpy(process->status, status, 20);
+    //process->status[20] = '\0';
     process->isBackground = isBackground;
+
+    list->count++;
 }
 
 //Hàm xóa tiến trình
-void removeProcess(ProcessList * list, DWORD processID, HANDLE hProcess, const char * cmdName, int isBackground){
+void removeProcess(ProcessList * list, DWORD processID){
     for(int i = 0; i < list->count; i++){
         if(list->processes[i].processID == processID){
             for (int j = i; j < list->count - 1; j++) {
@@ -50,3 +54,4 @@ void listProcess(ProcessList * list){
             list->processes[i].cmdName);
     }
 }
+

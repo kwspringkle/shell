@@ -7,6 +7,7 @@ typedef struct {
     DWORD processID;
     HANDLE hProcess;
     char cmdName[256];
+    char status[20];
     int isBackground;
 } ProcessInfo;
 
@@ -19,7 +20,7 @@ typedef struct{
 
 void initProcessList(ProcessList * list);
 void addProcess(ProcessList * list, DWORD processID, HANDLE hProcess, const char * cmdName, int isBackground);
-void removeProcess(ProcessList * list, DWORD processID, HANDLE hProcess, const char * cmdName, int isBackground);
+void removeProcess(ProcessList * list, DWORD processID);
 void listProcess(ProcessList * list);
 int killProcess(ProcessList * list, DWORD processID);
 ProcessInfo * findProcess(ProcessList * list, DWORD processID);
