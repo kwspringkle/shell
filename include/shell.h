@@ -3,10 +3,12 @@
 
 #include "process.h"
 
-BOOL WINAPI CtrlHandler(DWORD fdwCtrlType);
-void runShell();
-void executeCreateCommand(const char* command, ProcessList* processList);
-void executeBatchFile(const char* filename, ProcessList* processList);
-void handleBuiltInCommands(const char* command, ProcessList* processList);
+void printDate();
+void printTime();
+void printPwd();
+void makeDir(const char * folderName);
+void removeDir(const char * folderName);
+void listDirectoryTree(const char *path);
+void changeDirectory(const char * path);
 
 #endif

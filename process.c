@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//Khởi tạo danh sách tiến trình để quản lý
+//Hàm khởi tạo danh sách tiến trình để quản lý
 void initProcessList(ProcessList * list){
     list->capacity=10;
     list->count=0;
