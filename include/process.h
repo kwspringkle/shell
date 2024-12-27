@@ -23,6 +23,9 @@ void addProcess(ProcessList * list, DWORD processID, HANDLE hProcess, const char
 void removeProcess(ProcessList * list, DWORD processID);
 void listProcess(ProcessList * list);
 int killProcess(ProcessList * list, DWORD processID);
+void SuspendProcessById(ProcessList *processList, DWORD processID);
+void ResumeProcessById(ProcessList *processList, DWORD processID);
+
 ProcessInfo * findProcess(ProcessList * list, DWORD processID);
 void cleanProcessList(ProcessList * list);
 
