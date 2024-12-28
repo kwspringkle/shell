@@ -91,3 +91,100 @@ void changeDirectory(const char * path){
         perror("Cannot change directory!");
     }
 }
+
+//Hàm tạo file mới
+void createFile(const char * filename){
+    if(filename == NULL){
+        printf("Filename cannot be empty!\n");
+        return;
+    }
+
+    FILE * file = fopen(filename, "w");
+    if (file != NULL) {
+        printf("File created successfully: %s\n", filename);
+        fclose(file);
+    } else {
+        perror("Cannot create file");
+    }
+}
+
+// Hàm đọc nội dung trong file
+void readFile(const char *filename) {
+    if (filename == NULL) {
+        printf("Filename cannot be empty!\n");
+        return;
+    }
+
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        perror("Cannot open file");
+        return;
+    }
+
+    char buffer[1024];
+    printf("Contents of %s:\n", filename);
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+        printf("%s", buffer);
+    }
+
+    fclose(file);
+    printf("\n");
+}
+
+// Hàm ghi nội dung vào file
+void writeFile(const char *filename, const char *content) {
+    if (filename == NULL || content == NULL) {
+        printf("Filename and content cannot be empty!\n");
+        return;
+    }
+
+    FILE *file = fopen(filename, "w");
+    if (file == NULL) {
+        perror("Cannot open file for writing");
+        return;
+    }
+
+    if (fputs(content, file) != EOF) {
+        printf("Content written to file successfully\n");
+    } else {
+        perror("Error writing to file");
+    }
+
+    fclose(file);
+}
+
+// Hàm ghi thêm nội dung vào file (trước đó trong file đã có nội dung sẵn)
+void appendFile(const char *filename, const char *content) {
+    if (filename == NULL || content == NULL) {
+        printf("Filename and content cannot be empty!\n");
+        return;
+    }
+
+    FILE *file = fopen(filename, "a");
+    if (file == NULL) {
+        perror("Cannot open file for appending");
+        return;
+    }
+
+    if (fputs(content, file) != EOF) {
+        printf("Content appended to file successfully\n");
+    } else {
+        perror("Error appending to file");
+    }
+
+    fclose(file);
+}
+
+// Hàm xóa file
+void removeFile(const char *filename) {
+    if (filename == NULL) {
+        printf("Filename cannot be empty!\n");
+        return;
+    }
+
+    if (remove(filename) == 0) {
+        printf("File deleted successfully: %s\n", filename);
+    } else {
+        perror("Cannot delete file");
+    }
+}

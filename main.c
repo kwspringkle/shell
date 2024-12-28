@@ -21,44 +21,99 @@ void executeCommand(char *command) {
     args[i] = NULL;
 
     // Xử lý lệnh
+    //In ra ngày
     if (strcmp(args[0], "date") == 0) {
         printDate();
-    } else if (strcmp(args[0], "time") == 0) {
+    } //In ra giờ 
+    else if (strcmp(args[0], "time") == 0) {
         printTime();
-    } else if (strcmp(args[0], "pwd") == 0) {
+    } //In ra địa chỉ đang ở hiện tạitại
+    else if (strcmp(args[0], "pwd") == 0) {
         printPwd();
-    } else if (strcmp(args[0], "mkdir") == 0) {
+    } //Tạo thư mục mới
+    else if (strcmp(args[0], "mkdir") == 0) {
         if (args[1] != NULL) {
             makeDir(args[1]);
         } else {
-            printf("Please specify a directory name.\n");
+            printf("Usage: mkdir <dirname>\n");
         }
-    } else if (strcmp(args[0], "rmdir") == 0) {
+    } //Xóa thư mục 
+    else if (strcmp(args[0], "rmdir") == 0) {
         if (args[1] != NULL) {
             removeDir(args[1]);
         } else {
-            printf("Please specify a directory name.\n");
+            printf("Usage: rmdir <dirpath>\n");
         }
-    } else if (strcmp(args[0], "ls") == 0) {
+    } //Liệt kê thư mục 
+    else if (strcmp(args[0], "ls") == 0) {
         if (args[1] != NULL) {
             listDirectoryTree(args[1]);
         } else {
-            printf("Please specify a directory.\n");
+            printf("Usage: ls <dirpath>\n");
         }
-    } else if (strcmp(args[0], "cd") == 0) {
+    }  //Chuyển thư mục
+    else if (strcmp(args[0], "cd") == 0) {
         if (args[1] != NULL) {
             changeDirectory(args[1]);
         } else {
-            printf("Please specify a path.\n");
+            printf("Usage: cd <dirpath>\n");
         }
-    } else {
+    } //Tạo file mới
+    else if(strcmp(args[0], "create") == 0){
+        if(args[1] != NULL){
+            createFile(args[1]);
+        } else {
+            printf("Usage: create <filename> \n");
+        }
+    }  //Đọc nội dung trong file
+    else if(strcmp(args[0], "read") == 0){
+        if(args[1] != NULL){
+            readFile(args[1]);
+        } else{
+            printf("Usage: read <filename> \n");
+        }
+    }   // Ghi nội dung vào file
+    else if (strcmp(args[0], "write") == 0) {
+        if (args[1] != NULL && args[2] != NULL) {
+            char content[MAX_COMMAND_LENGTH] = "";
+            for (int j = 2; args[j] != NULL; j++) {
+                strcat(content, args[j]);
+                strcat(content, " ");
+            }
+            writeFile(args[1], content);
+        } else {
+            printf("Usage: write <filename> <content>\n");
+        }
+    }   // Thêm nội dung vào file (trước đó đã có nội dung sẵn)
+    else if (strcmp(args[0], "append") == 0) {
+        if (args[1] != NULL && args[2] != NULL) {
+            char content[MAX_COMMAND_LENGTH] = "";
+            for (int j = 2; args[j] != NULL; j++) {
+                strcat(content, args[j]);
+                strcat(content, " ");
+            }
+            appendFile(args[1], content);
+        } else {
+            printf("Usage: append <filename> <content>\n");
+        }
+    } //Xóa file
+    else if (strcmp(args[0], "remove") == 0) {
+        if (args[1] != NULL) {
+            removeFile(args[1]);
+        } else {
+            printf("Usage: remove <filename>\n");
+        }
+    }
+
+    else {
         printf("Unknown command: %s\n", args[0]);
     }
+
 }
 
 int main() {
     char command[1024];
-
+    printf("Welcome to our shell!\n");
     // Lặp vô hạn để nhận lệnh từ người dùng
     while (1) {
         printf("minishell> ");

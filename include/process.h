@@ -2,6 +2,7 @@
 #define PROCESS_H
 
 #include <windows.h>
+#include <stdbool.h>
 
 typedef struct {
     DWORD processID;
