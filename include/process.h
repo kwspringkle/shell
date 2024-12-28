@@ -10,21 +10,21 @@ typedef struct {
     char cmdName[256];
     char status[20];
     int isBackground;
-} ProcessInfo;
+} Process;
 
-typedef struct{
-    ProcessInfo * processes;
+typedef struct {
+    Process processes[100];
     int count;
-    int capacity;
-} ProcessList;
+}ProcessList;
 
-
-void initProcessList(ProcessList * list);
-void addProcess(ProcessList * list, DWORD processID, HANDLE hProcess, const char * cmdName, int isBackground);
-void removeProcess(ProcessList * list, DWORD processID);
-void listProcess(ProcessList * list);
-int killProcess(ProcessList * list, DWORD processID);
-ProcessInfo * findProcess(ProcessList * list, DWORD processID);
-void cleanProcessList(ProcessList * list);
-
+void addProcess(ProcessList * list, DWORD processID, HANDLE hProcess, const char * command, int isBackground);
+void removeProcess(ProcessList* list, DWORD processID);
+void listProcesses(const ProcessList* list);
+void runForeground(ProcessList* list, const char* cmdName);
+void runBackground(ProcessList* list, const char* cmdName);
+void updateProcessStatus(ProcessList* list, DWORD processID, const char* newStatus);
+void stopProcess(ProcessList* list, DWORD processID);
+void killProcess(ProcessList* list, DWORD processID);
+void stopForeground(ProcessList * list, int signal);
+void resumeProcess(ProcessList* list, DWORD processID);
 #endif
