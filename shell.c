@@ -130,8 +130,40 @@ void readFile(const char *filename) {
     fclose(file);
     printf("\n");
 }
-
-// Hàm ghi nội dung vào file
+// Hàm chuyển đổi chuỗi có escape sequence
+char* processEscapeSequences(const char* input) {
+    if (input == NULL) return NULL;
+    
+    int len = strlen(input);
+    char* output = (char*)malloc(len + 1);  // Cấp phát bộ nhớ cho output
+    int j = 0;
+    
+    for (int i = 0; i < len; i++) {
+        if (input[i] == '\\' && i + 1 < len) {
+            switch (input[i + 1]) {
+                case 'n':
+                    output[j++] = '\n';
+                    i++;  // Bỏ qua ký tự tiếp theo
+                    break;
+                case 't':
+                    output[j++] = '\t';
+                    i++;
+                    break;
+                case '\\':
+                    output[j++] = '\\';
+                    i++;
+                    break;
+                default:
+                    output[j++] = input[i];
+            }
+        } else {
+            output[j++] = input[i];
+        }
+    }
+    output[j] = '\0';
+    return output;
+}
+//Hàm ghi nội dung vào file
 void writeFile(const char *filename, const char *content) {
     if (filename == NULL || content == NULL) {
         printf("Filename and content cannot be empty!\n");
@@ -144,16 +176,19 @@ void writeFile(const char *filename, const char *content) {
         return;
     }
 
-    if (fputs(content, file) != EOF) {
-        printf("Content written to file successfully\n");
-    } else {
-        perror("Error writing to file");
+    char* processed_content = processEscapeSequences(content);
+    if (processed_content != NULL) {
+        if (fputs(processed_content, file) != EOF) {
+            printf("Content written to file successfully\n");
+        } else {
+            perror("Error writing to file");
+        }
+        free(processed_content);
     }
 
     fclose(file);
 }
-
-// Hàm ghi thêm nội dung vào file (trước đó trong file đã có nội dung sẵn)
+// Hàm ghi thêm nội dung vào file
 void appendFile(const char *filename, const char *content) {
     if (filename == NULL || content == NULL) {
         printf("Filename and content cannot be empty!\n");
@@ -166,10 +201,14 @@ void appendFile(const char *filename, const char *content) {
         return;
     }
 
-    if (fputs(content, file) != EOF) {
-        printf("Content appended to file successfully\n");
-    } else {
-        perror("Error appending to file");
+    char* processed_content = processEscapeSequences(content);
+    if (processed_content != NULL) {
+        if (fputs(processed_content, file) != EOF) {
+            printf("Content appended to file successfully\n");
+        } else {
+            perror("Error appending to file");
+        }
+        free(processed_content);
     }
 
     fclose(file);

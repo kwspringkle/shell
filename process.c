@@ -35,13 +35,13 @@ void removeProcess(ProcessList* list, DWORD processID) {
 //Hàm list ra các process
 void listProcesses(const ProcessList* list) {
     printf("Current processes:\n");
-    printf("PID\tStatus\t\tCommand\t\tType\n");
+    printf("%-8s %-15s %-20s %-10s\n", "PID", "Status", "Command", "Type"); 
     for (int i = 0; i < list->count; i++) {
-        printf("%lu\t%s\t\t%s\t\t%s\n",
-               list->processes[i].processID,
-               list->processes[i].status,
-               list->processes[i].cmdName,
-               list->processes[i].isBackground ? "Background" : "Foreground");
+    printf("%-8lu %-15s %-20s %-10s\n",
+           list->processes[i].processID,
+           list->processes[i].status,
+           list->processes[i].cmdName,
+           list->processes[i].isBackground ? "Background" : "Foreground");
     }
 }
 //Hàm chạy ở foreground
@@ -119,7 +119,6 @@ void stopProcess(ProcessList* list, DWORD processID) {
     }
     printf("Process with PID: %lu not found.\n", processID);
 }
-
 //Hàm để kill process
 void killProcess(ProcessList* list, DWORD processID) {
     for (int i = 0; i < list->count; i++) {
