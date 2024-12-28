@@ -1,1 +1,3 @@
-pwd \n date 
+pwd
+date 
+time 
