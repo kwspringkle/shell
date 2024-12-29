@@ -3,6 +3,7 @@
 #include <string.h>
 #include <windows.h>
 #include <signal.h>
+#include <tlhelp32.h>
 
 //Hàm thêm process vào list
 void addProcess(ProcessList * list, DWORD processID, HANDLE hProcess, const char * command, int isBackground){
@@ -86,7 +87,7 @@ void runBackground(ProcessList* list, const char* cmdName) {
     addProcess(list, pi.dwProcessId, pi.hProcess, cmdName, 1);
 
     printf("Background process (PID: %lu) started.\n", pi.dwProcessId);
-
+    
     CloseHandle(pi.hThread);
 }
 //Hàm update trạng thái của process
@@ -101,6 +102,11 @@ void updateProcessStatus(ProcessList* list, DWORD processID, const char* newStat
 }
 //Hàm stop process
 void stopProcess(ProcessList* list, DWORD processID) {
+    if (list == NULL) {
+        printf("Invalid process list.\n");
+        return;
+    }
+
     for (int i = 0; i < list->count; i++) {
         if (list->processes[i].processID == processID) {
             if (!list->processes[i].isBackground) {
@@ -108,12 +114,49 @@ void stopProcess(ProcessList* list, DWORD processID) {
                 return;
             }
 
-            if (SuspendThread(list->processes[i].hProcess) != -1) {
-                updateProcessStatus(list, processID, "Stopped");
+            // Lấy snapshot của process
+            HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+            if (hSnapshot == INVALID_HANDLE_VALUE) {
+                printf("Failed to create snapshot. Error: %lu\n", GetLastError());
+                return;
+            }
+
+            THREADENTRY32 te32;
+            te32.dwSize = sizeof(THREADENTRY32);
+            DWORD mainThreadId = 0;
+
+            // Tìm main thread của process
+            if (Thread32First(hSnapshot, &te32)) {
+                do {
+                    if (te32.th32OwnerProcessID == processID) {
+                        mainThreadId = te32.th32ThreadID;
+                        break;
+                    }
+                } while (Thread32Next(hSnapshot, &te32));
+            }
+
+            CloseHandle(hSnapshot);
+
+            if (mainThreadId == 0) {
+                printf("No threads found for process (PID: %lu)\n", processID);
+                return;
+            }
+
+            // Mở thread với thread ID đã tìm được
+            HANDLE hThread = OpenThread(THREAD_SUSPEND_RESUME, FALSE, mainThreadId);
+            if (hThread == NULL) {
+                printf("Failed to open thread. Error: %lu\n", GetLastError());
+                return;
+            }
+
+            if (SuspendThread(hThread) != (DWORD)-1) {
+                strcpy(list->processes[i].status, "Stopped");
                 printf("Process (PID: %lu) stopped.\n", processID);
             } else {
-                printf("Failed to stop process (PID: %lu).\n", processID);
+                printf("Failed to suspend thread. Error: %lu\n", GetLastError());
             }
+
+            CloseHandle(hThread);
             return;
         }
     }
@@ -121,19 +164,29 @@ void stopProcess(ProcessList* list, DWORD processID) {
 }
 //Hàm để kill process
 void killProcess(ProcessList* list, DWORD processID) {
+    if (list == NULL) {
+        printf("Invalid process list.\n");
+        return;
+    }
+
     for (int i = 0; i < list->count; i++) {
         if (list->processes[i].processID == processID) {
             if (!list->processes[i].isBackground) {
-                printf("Cannot stop foreground process (PID: %lu).\n", processID);
+                printf("Cannot kill foreground process (PID: %lu).\n", processID);
                 return;
             }
 
             if (TerminateProcess(list->processes[i].hProcess, 0)) {
                 printf("Process (PID: %lu) terminated.\n", processID);
                 CloseHandle(list->processes[i].hProcess);
-                removeProcess(list, processID);
+                
+                for (int j = i; j < list->count - 1; j++) {
+                    list->processes[j] = list->processes[j + 1];
+                }
+                list->count--;
             } else {
-                printf("Failed to terminate process (PID: %lu). Error: %lu\n", processID, GetLastError());
+                printf("Failed to terminate process (PID: %lu). Error: %lu\n", 
+                       processID, GetLastError());
             }
             return;
         }
@@ -143,20 +196,61 @@ void killProcess(ProcessList* list, DWORD processID) {
 
 // Hàm resume process cho background
 void resumeProcess(ProcessList* list, DWORD processID) {
+    if (list == NULL) {
+        printf("Invalid process list.\n");
+        return;
+    }
+
     for (int i = 0; i < list->count; i++) {
         if (list->processes[i].processID == processID) {
-            // Kiểm tra xem có phải background process không
             if (!list->processes[i].isBackground) {
                 printf("Cannot resume foreground process (PID: %lu).\n", processID);
                 return;
             }
-            
-            if (ResumeThread(list->processes[i].hProcess) != -1) {
-                updateProcessStatus(list, processID, "Running");
-                printf("Background process (PID: %lu) resumed.\n", processID);
-            } else {
-                printf("Failed to resume background process (PID: %lu).\n", processID);
+
+            // Lấy snapshot của process
+            HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+            if (hSnapshot == INVALID_HANDLE_VALUE) {
+                printf("Failed to create snapshot. Error: %lu\n", GetLastError());
+                return;
             }
+
+            THREADENTRY32 te32;
+            te32.dwSize = sizeof(THREADENTRY32);
+            DWORD mainThreadId = 0;
+
+            // Tìm main thread của process
+            if (Thread32First(hSnapshot, &te32)) {
+                do {
+                    if (te32.th32OwnerProcessID == processID) {
+                        mainThreadId = te32.th32ThreadID;
+                        break;
+                    }
+                } while (Thread32Next(hSnapshot, &te32));
+            }
+
+            CloseHandle(hSnapshot);
+
+            if (mainThreadId == 0) {
+                printf("No threads found for process (PID: %lu)\n", processID);
+                return;
+            }
+
+            // Mở thread với thread ID đã tìm được
+            HANDLE hThread = OpenThread(THREAD_SUSPEND_RESUME, FALSE, mainThreadId);
+            if (hThread == NULL) {
+                printf("Failed to open thread. Error: %lu\n", GetLastError());
+                return;
+            }
+
+            if (ResumeThread(hThread) != (DWORD)-1) {
+                strcpy(list->processes[i].status, "Running");
+                printf("Process (PID: %lu) resumed.\n", processID);
+            } else {
+                printf("Failed to resume thread. Error: %lu\n", GetLastError());
+            }
+
+            CloseHandle(hThread);
             return;
         }
     }
