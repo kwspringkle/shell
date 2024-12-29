@@ -238,6 +238,8 @@ int main() {
             break;
         }
         executeCommand(command);
+        checkBackgroundProcesses(&processList);
+        Sleep(1000);
     }
 
 }
