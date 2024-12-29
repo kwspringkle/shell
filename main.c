@@ -258,11 +258,11 @@ void runBatFile(const char * filename){
 int main() {
     char command[1024];
     printf("\t TINYSHELL\n");
-    printf("------------------------------------------------\n");
+    printf("-------------------------------------------------\n");
     printf("Welcome to our tinyshell!\n");
     printf("\t \\(^-^)/ \n");
     printf("Created by Dinh Ngoc Khanh Huyen & Tran Khanh Quynh \n");
-    printf("------------------------------------------------\n");
+    printf("-------------------------------------------------\n");
 
     signal(SIGINT, signalHandler);
     while (1) {
