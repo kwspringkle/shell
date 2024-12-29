@@ -104,10 +104,10 @@ void runBackground(ProcessList *list, const char *cmdName) {
     addProcess(list, pi.dwProcessId, pi.hProcess, cmdName, 1);
     printf("Background process (PID: %lu) started.\n", pi.dwProcessId);
 
-    CloseHandle(pi.hThread);  // Không cần chờ, tiến trình chạy nền
+    CloseHandle(pi.hThread);  
 }
 
-
+//Kiểm tra xem tiến trình background đã kết thúc chưa. Nếu kết thúc rồi thì xóa ra khỏi list
 void checkBackgroundProcesses(ProcessList *list) {
     for (int i = 0; i < list->count; i++) {
         if (list->processes[i].isBackground) {
@@ -125,7 +125,7 @@ void checkBackgroundProcesses(ProcessList *list) {
     }
 }
 
-//Hàm update trạng thái của process
+//Hàm update trạng thái (trừ khi đã hoàn thành) của process
 void updateProcessStatus(ProcessList* list, DWORD processID, const char* newStatus) {
     for (int i = 0; i < list->count; i++) {
         if (list->processes[i].processID == processID) {
@@ -135,7 +135,8 @@ void updateProcessStatus(ProcessList* list, DWORD processID, const char* newStat
     }
     printf("Process with PID: %lu not found.\n", processID);
 }
-//Hàm stop process
+
+//Hàm stop/suspend process
 void stopProcess(ProcessList *list, DWORD processID) {
     for (int i = 0; i < list->count; i++) {
         if (list->processes[i].processID == processID) {
@@ -175,6 +176,7 @@ void stopProcess(ProcessList *list, DWORD processID) {
     }
     printf("Process with PID: %lu not found.\n", processID);
 }
+
 //Hàm để kill process
 void killProcess(ProcessList *list, DWORD processID) {
     for (int i = 0; i < list->count; i++) {
@@ -193,7 +195,7 @@ void killProcess(ProcessList *list, DWORD processID) {
 }
 
 
-// Hàm resume process cho background
+// Hàm resume process
 void resumeProcess(ProcessList *list, DWORD processID) {
     for (int i = 0; i < list->count; i++) {
         if (list->processes[i].processID == processID) {
