@@ -228,3 +228,64 @@ void removeFile(const char *filename) {
     }
 }
 
+void help() {
+    printf("\n\tHOW TO USE TINYSHELL?\n");
+    printf("\t\t (._.)? \n");
+    printf("Tinyshell provide 24 built-in commands\n");
+    printf("--------------------------------------------------------------------------------------------------\n");
+    printf("\n");
+    printf("\n\t----- BASIC COMMANDS -----\n");
+    printf("--------------------------------------------------------------------------------------------------\n");
+    printf("| %-3s | %-10s | %-50s | %-30s |\n", "No.", "Command", "Description", "Usage");
+    printf("--------------------------------------------------------------------------------------------------\n");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 1, "date", "Display current date", "date");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 2, "time", "Display current time", "time");
+    printf("--------------------------------------------------------------------------------------------------\n");
+
+    printf("\t----- DIRECTORY COMMANDS -----\n");
+    printf("--------------------------------------------------------------------------------------------------\n");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 3, "pwd", "Print current directory", "pwd");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 4, "mkdir", "Create a new directory", "mkdir <dirname>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 5, "rmdir", "Remove a directory", "rmdir <dirpath>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 6, "ls", "List directory contents", "ls <dirpath>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 7, "cd", "Change directory", "cd <dirpath>");
+    printf("--------------------------------------------------------------------------------------------------\n");
+
+    printf("\t----- FILE COMMANDS -----\n");
+    printf("--------------------------------------------------------------------------------------------------\n");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 8, "create", "Create a new file", "create <filename>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 9, "read", "Read a file's content", "read <filename>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 10, "write", "Write to a file", "write <filename> <content>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 11, "append", "Append content to a file", "append <filename> <content>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 12, "remove", "Delete a file", "remove <filename>");
+    printf("--------------------------------------------------------------------------------------------------\n");
+
+    printf("\t----- PROCESS COMMANDS -----\n");
+    printf("--------------------------------------------------------------------------------------------------\n");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 13, "bg", "Run a process in the background", "bg <command>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 14, "fg", "Bring background process to foreground", "fg <command>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 15, "list", "List running processes", "list");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 16, "stop", "Stop a process by PID", "stop <pid>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 17, "resume", "Resume a process by PID", "resume <pid>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 18, "kill", "Kill a process by PID", "kill <pid>");
+    printf("--------------------------------------------------------------------------------------------------\n");
+
+    printf("\t----- ENVIRONMENT VARIABLES COMMANDS -----\n");
+    printf("--------------------------------------------------------------------------------------------------\n");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 19, "showpath", "Show environment variable PATH", "showpath");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 20, "addpath", "Add a new path to PATH", "addpath <path>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 21, "removepath", "Remove a path from PATH", "removepath <path>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 22, "updatepath", "Update a path in PATH", "updatepath <oldPath> <newPath>");
+    printf("--------------------------------------------------------------------------------------------------\n");
+
+    printf("\t----- .BAT FILE COMMAND -----\n");
+    printf("--------------------------------------------------------------------------------------------------\n");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 23, "bat", "Run commands from a .bat file", "bat <filename>");
+    printf("--------------------------------------------------------------------------------------------------\n");
+
+    printf("\t----- HELP COMMAND -----\n");
+    printf("--------------------------------------------------------------------------------------------------\n");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 24, "help", "Print out all commands available", "help");
+    printf("--------------------------------------------------------------------------------------------------\n");
+}
+

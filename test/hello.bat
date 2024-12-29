@@ -1,0 +1,3 @@
+pwd
+date
+time 

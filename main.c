@@ -13,6 +13,7 @@ EnvTable envTable = {0};
 void signalHandler(int signal) {
     stopForeground(&processList, signal);
 }
+void runBatFile(const char * filename);
 
 void executeCommand(char *command) {
     char *args[10];
@@ -211,11 +212,47 @@ void executeCommand(char *command) {
             printf("Usage: updatepath <oldPath> <newPath>\n");
         }
     }
+    /*-----------------------------------------------
+            XỬ LÝ FILE .BAT
+    -----------------------------------------------*/
+    else if(strcmp(args[0], "bat") == 0){
+        printf("Warning: When using a .bat file, ensure each command is written on a separate line.\n");
+        if(args[1] != NULL){
+            runBatFile(args[1]);
+        } else{
+            printf("Usage: bat <filename>\n");
+        }
+    }
+    /*-----------------------------------------------
+            HELP        
+    -----------------------------------------------*/
+    else if(strcmp(args[0], "help")==0){
+        help();
+    }
     else {
         printf("Unknown command: %s\n", args[0]);
         printf("If you need help, enter: help\n");
     }
 
+}
+
+void runBatFile(const char * filename){
+    FILE *file = fopen(filename, "r");
+    if(file == NULL){
+        printf("Couldn't open the .bat file: %s\n", filename);
+        return;
+    }
+    char line[2048];
+    while(fgets(line, sizeof(line), file) != NULL){
+        line[strcspn(line, "\n")] = 0;
+        if(line[0] == '\0'){
+            continue;
+        }
+        printf("Executing: %s\n", line);
+        executeCommand(line);
+    }
+
+    fclose(file);
 }
 
 int main() {
@@ -235,9 +272,13 @@ int main() {
 
         // Lệnh exit
         if (strcmp(command, "exit") == 0) {
+            printf("Goodbye! See you again!\n");
+            printf("\t (^_^)b \n");
             break;
         }
+        
         executeCommand(command);
+
         checkBackgroundProcesses(&processList);
         Sleep(1000); //Dừng 1s để kiểm tra trạng thái của tiến trình background
     }
