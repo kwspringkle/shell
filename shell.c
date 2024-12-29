@@ -135,7 +135,7 @@ char* processEscapeSequences(const char* input) {
     if (input == NULL) return NULL;
     
     int len = strlen(input);
-    char* output = (char*)malloc(len + 1);  // Cấp phát bộ nhớ cho output
+    char* output = (char*)malloc(len + 1);  
     int j = 0;
     
     for (int i = 0; i < len; i++) {
@@ -143,7 +143,7 @@ char* processEscapeSequences(const char* input) {
             switch (input[i + 1]) {
                 case 'n':
                     output[j++] = '\n';
-                    i++;  // Bỏ qua ký tự tiếp theo
+                    i++;  
                     break;
                 case 't':
                     output[j++] = '\t';
@@ -227,3 +227,4 @@ void removeFile(const char *filename) {
         perror("Cannot delete file");
     }
 }
+

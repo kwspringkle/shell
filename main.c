@@ -1,5 +1,6 @@
 #include "include/shell.h"
 #include "include/process.h"
+#include "include/path.h"
 #include <stdio.h>
 #include <windows.h>
 #include <signal.h>
@@ -7,6 +8,7 @@
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_PATH_LENGTH 1024
 ProcessList processList = {0};
+EnvTable envTable = {0};
 
 void signalHandler(int signal) {
     stopForeground(&processList, signal);
@@ -176,6 +178,37 @@ void executeCommand(char *command) {
             killProcess(&processList, pid);
         } else {
             printf("Usage: kill <pid>\n");
+        }
+    }
+    /*-----------------------------------------------
+        XỬ LÝ CÁC LỆNH LIÊN QUAN ĐẾN BIẾN MÔI TRƯỜNG
+    -----------------------------------------------*/
+    // Lệnh xem các biến môi trường
+    else if(strcmp(args[0], "showpath") == 0){
+        showPath(&envTable);
+    }
+    // Thêm các biến môi trường
+    else if(strcmp(args[0],"addpath")==0){
+        if (args[1] != NULL) {
+            addPath(&envTable, args[1]);
+        } else {
+            printf("Usage: addpath <path>\n");
+        }
+    }
+    //Xóa biến môi trường
+    else if(strcmp(args[0], "removepath")==0){
+        if(args[1] != NULL){
+            removePath(&envTable, args[1]);
+        } else {
+            printf("Usage: removepath <path>\n");
+        }
+    }
+    //Update biến môi trường
+    else if(strcmp(args[0], "updatepath")==0){
+        if (args[1] != NULL && args[2] != NULL) {
+            updatePath(&envTable, args[1], args[2]);
+        } else {
+            printf("Usage: updatepath <oldPath> <newPath>\n");
         }
     }
     else {
