@@ -238,6 +238,8 @@ int main() {
             break;
         }
         executeCommand(command);
+        checkBackgroundProcesses(&processList);
+        Sleep(1000); //Dừng 1s để kiểm tra trạng thái của tiến trình background
     }
 
 }

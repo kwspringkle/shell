@@ -27,4 +27,5 @@ void stopProcess(ProcessList* list, DWORD processID);
 void killProcess(ProcessList* list, DWORD processID);
 void stopForeground(ProcessList * list, int signal);
 void resumeProcess(ProcessList* list, DWORD processID);
+void checkBackgroundProcesses(ProcessList *list);
 #endif
