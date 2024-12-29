@@ -16,6 +16,7 @@ void writeFile(const char *filename, const char *content);
 void appendFile(const char *filename, const char *content);
 void removeFile(const char *filename);
 char*processEscapeSequences(const char* input);
+void help();
 
 #endif
 
