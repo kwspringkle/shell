@@ -262,9 +262,9 @@ void help() {
 
     printf("\t----- PROCESS COMMANDS -----\n");
     printf("--------------------------------------------------------------------------------------------------\n");
-    printf("| %-3d | %-10s | %-50s | %-30s |\n", 13, "bg", "Run a process in the background", "bg <command>");
-    printf("| %-3d | %-10s | %-50s | %-30s |\n", 14, "fg", "Bring background process to foreground", "fg <command>");
-    printf("| %-3d | %-10s | %-50s | %-30s |\n", 15, "list", "List running processes", "list");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 13, "bg", "Run a process in background mode", "bg <command>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 14, "fg", "Run a process in foreground mode", "fg <command>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 15, "list", "List of processes and processes' status", "list");
     printf("| %-3d | %-10s | %-50s | %-30s |\n", 16, "stop", "Stop a process by PID", "stop <pid>");
     printf("| %-3d | %-10s | %-50s | %-30s |\n", 17, "resume", "Resume a process by PID", "resume <pid>");
     printf("| %-3d | %-10s | %-50s | %-30s |\n", 18, "kill", "Kill a process by PID", "kill <pid>");
@@ -273,9 +273,9 @@ void help() {
     printf("\t----- ENVIRONMENT VARIABLES COMMANDS -----\n");
     printf("--------------------------------------------------------------------------------------------------\n");
     printf("| %-3d | %-10s | %-50s | %-30s |\n", 19, "showpath", "Show environment variable PATH", "showpath");
-    printf("| %-3d | %-10s | %-50s | %-30s |\n", 20, "addpath", "Add a new path to PATH", "addpath <path>");
-    printf("| %-3d | %-10s | %-50s | %-30s |\n", 21, "removepath", "Remove a path from PATH", "removepath <path>");
-    printf("| %-3d | %-10s | %-50s | %-30s |\n", 22, "updatepath", "Update a path in PATH", "updatepath <oldPath> <newPath>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 20, "addpath", "Add a new path", "addpath <path>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 21, "removepath", "Remove a path", "removepath <path>");
+    printf("| %-3d | %-10s | %-50s | %-30s |\n", 22, "updatepath", "Update a path", "updatepath <oldPath> <newPath>");
     printf("--------------------------------------------------------------------------------------------------\n");
 
     printf("\t----- .BAT FILE COMMAND -----\n");
