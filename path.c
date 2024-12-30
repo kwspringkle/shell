@@ -56,33 +56,7 @@ void removePath(EnvTable *envTable, const char *pathToRemove) {
                 strcpy(envTable->variables[j], envTable->variables[j + 1]);
             }
             envTable->count--;
-            printf("Removed '%s' from PATH.\n", pathToRemove);
-            break;
-        }
-    }
-
-    if (!found) {
-        printf("Path '%s' not found in the environment table.\n", pathToRemove);
-    }
-}
-
-// Hàm cập nhật giá trị PATH
-void updatePath(EnvTable *envTable, const char *oldPath, const char *newPath) {
-    int found = 0;
-    for (int i = 0; i < envTable->count; i++) {
-        if (strcmp(envTable->variables[i], oldPath) == 0) {
-            strcpy(envTable->variables[i], newPath);
-            found = 1;
-            printf("Updated PATH: '%s' -> '%s'\n", oldPath, newPath);
-            break;
-        }
-    }
-
-    if (!found) {
-        printf("Path '%s' not found in the environment table.\n", oldPath);
-    }
-}
-
+            printf("Removed '%s' from PATH.\0
 int isCommandInPath(const EnvTable *envTable, const char *cmdName, char *fullCmdPath) {
     for (int i = 0; i < envTable->count; i++) {
         snprintf(fullCmdPath, MAX_PATH, "%s\\%s", envTable->variables[i], cmdName);
