@@ -83,14 +83,13 @@ void updatePath(EnvTable *envTable, const char *oldPath, const char *newPath) {
     }
 }
 
-int isCommandInPath(const EnvTable *envTable, const char *cmdName){
+int isCommandInPath(const EnvTable *envTable, const char *cmdName, char *fullCmdPath) {
     for (int i = 0; i < envTable->count; i++) {
-        char fullPath[MAX_PATH];
-        snprintf(fullPath, MAX_PATH, "%s\\%s", envTable->variables[i], cmdName);
-
-        if (GetFileAttributes(fullPath) != INVALID_FILE_ATTRIBUTES) {
-            return 1; 
+        snprintf(fullCmdPath, MAX_PATH, "%s\\%s", envTable->variables[i], cmdName);
+        if (GetFileAttributes(fullCmdPath) != INVALID_FILE_ATTRIBUTES) {
+            return 1;
         }
     }
-    return 0; 
+    printf("Command not found in PATH\n");
+    return 0;
 }
