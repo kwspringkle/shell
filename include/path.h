@@ -13,5 +13,6 @@ void showPath(const EnvTable *envTable);
 void addPath(EnvTable *envTable, const char *newPath);
 void removePath(EnvTable *envTable, const char *pathToRemove);
 void updatePath(EnvTable *envTable, const char *oldPath, const char *newPath);
+int isCommandInPath(const EnvTable *envTable, const char *cmdName);
 
 #endif

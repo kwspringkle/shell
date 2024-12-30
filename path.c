@@ -9,6 +9,7 @@ void initEnvTable(EnvTable *envTable) {
     envTable->count = 0;
 }
 
+
 // Hàm thêm biến vào bảng
 void addEnvVariable(EnvTable *envTable, const char *variable) {
     if (envTable->count >= 100) {
@@ -80,4 +81,16 @@ void updatePath(EnvTable *envTable, const char *oldPath, const char *newPath) {
     if (!found) {
         printf("Path '%s' not found in the environment table.\n", oldPath);
     }
+}
+
+int isCommandInPath(const EnvTable *envTable, const char *cmdName){
+    for (int i = 0; i < envTable->count; i++) {
+        char fullPath[MAX_PATH];
+        snprintf(fullPath, MAX_PATH, "%s\\%s", envTable->variables[i], cmdName);
+
+        if (GetFileAttributes(fullPath) != INVALID_FILE_ATTRIBUTES) {
+            return 1; 
+        }
+    }
+    return 0; 
 }
