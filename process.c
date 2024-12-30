@@ -49,16 +49,17 @@ void listProcesses(const ProcessList* list) {
 void runForeground(ProcessList* list, const char* cmdName, EnvTable *envTable) {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
+    char fullCmdPath[MAX_PATH];
 
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     ZeroMemory(&pi, sizeof(pi));
 
-    if (!isCommandInPath(envTable, cmdName)) {
+    if (!isCommandInPath(envTable, cmdName, fullCmdPath)){
         return;
     }
 
-    if (!CreateProcess(NULL, (LPSTR)cmdName, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
+    if (!CreateProcess(NULL, fullCmdPath, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
         printf("CreateProcess failed (%lu).\n", GetLastError());
         return;
     }
@@ -96,16 +97,17 @@ void stopForeground(ProcessList * list, int signal){
 void runBackground(ProcessList* list, const char* cmdName, EnvTable *envTable) {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
+    char fullCmdPath[MAX_PATH];
 
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     ZeroMemory(&pi, sizeof(pi));
 
-    if (!isCommandInPath(envTable, cmdName)) {
+    if (!isCommandInPath(envTable, cmdName, fullCmdPath)) {
         return;
     }
 
-    if (!CreateProcess(NULL, (LPSTR)cmdName, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
+    if (!CreateProcess(NULL, fullCmdPath, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
         printf("CreateProcess failed (%lu).\n", GetLastError());
         return;
     }
