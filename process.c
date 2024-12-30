@@ -1,4 +1,5 @@
 #include "include/process.h"
+#include "include/path.h"
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
@@ -45,13 +46,17 @@ void listProcesses(const ProcessList* list) {
     }
 }
 //Hàm chạy ở foreground
-void runForeground(ProcessList* list, const char* cmdName) {
+void runForeground(ProcessList* list, const char* cmdName, EnvTable *envTable) {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
 
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     ZeroMemory(&pi, sizeof(pi));
+
+    if (!isCommandInPath(envTable, cmdName)) {
+        return;
+    }
 
     if (!CreateProcess(NULL, (LPSTR)cmdName, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
         printf("CreateProcess failed (%lu).\n", GetLastError());
@@ -88,13 +93,17 @@ void stopForeground(ProcessList * list, int signal){
 
 
 //Hàm chạy ở background
-void runBackground(ProcessList *list, const char *cmdName) {
+void runBackground(ProcessList* list, const char* cmdName, EnvTable *envTable) {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
 
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     ZeroMemory(&pi, sizeof(pi));
+
+    if (!isCommandInPath(envTable, cmdName)) {
+        return;
+    }
 
     if (!CreateProcess(NULL, (LPSTR)cmdName, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
         printf("CreateProcess failed (%lu).\n", GetLastError());

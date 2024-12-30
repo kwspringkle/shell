@@ -137,7 +137,7 @@ void executeCommand(char *command) {
     //Chạy tiến trình ở background
     else if (strcmp(args[0], "bg") == 0) {
         if (args[1] != NULL) {
-            runBackground(&processList, args[1]);
+            runBackground(&processList, args[1], &envTable);
         } else {
             printf("Usage: bg <command>\n");
         }
@@ -145,7 +145,7 @@ void executeCommand(char *command) {
     //Chạy tiến trình ở foreground
     else if (strcmp(args[0], "fg") == 0) {
         if (args[1] != NULL) {
-            runForeground(&processList, args[1]);
+            runForeground(&processList, args[1], &envTable);
         } else {
             printf("Usage: fg <command>\n");
         }
@@ -256,6 +256,7 @@ void runBatFile(const char * filename){
 }
 
 int main() {
+    addPath(&envTable, "D:\\Shell");
     char command[1024];
     printf("\t TINYSHELL\n");
     printf("-------------------------------------------------\n");
