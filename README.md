@@ -10,7 +10,7 @@ gcc -o tinyshell main.c path.c process.c shell.c
 .\tinyshell.exe
 ```
 
-Tiny shell có 24 lệnh cơ bản
+Tiny shell có 25 lệnh cơ bản.
 
 ## I. Các lệnh cơ bản
 1. **date**: In ra ngày tháng năm hiện tại
@@ -39,11 +39,12 @@ Tiny shell có 24 lệnh cơ bản
 18. **kill**: Hủy bỏ tiến trình
 
 ## V. Các lệnh liên quan đến biến môi trường (Không dùng biến môi trường của HDH)
-19. **showpath**: In ra các biến môi trường
-20. **addpath**: Thêm biến môi trường
+19. **showpath**: In ra các biến môi trường, mặc định ban đầu là D:\Shell
+20. **addpath**: Thêm biến môi trường, khi thêm biến môi trường thì có thể chạy trực tiếp mà không cần cd tới folder
 21. **removepath**: Xóa biến môi trường
 22. **updatepath**: Sửa biến môi trường
 
 ## VI. Các lệnh khác
 23. **bat**: Chạy bat file
 24. **help**: In ra tất cả các lệnh
+25. **exit**: Thoát khỏi shell
